@@ -10,7 +10,7 @@ class Vectorizer:
         self.recipes_df = recipes_df
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.index = None
-        self._build_index()
+        self.build_index()
 
     def build_index(self):
         """

@@ -1,16 +1,30 @@
 import pandas as pd
+import os
 from tqdm import tqdm
 
 class CSVHandler:
     def __init__(self, file_path):
         self.file_path = file_path
-        load_dataset(file_path)
+        self.recipes = self.load_dataset(file_path)
 
-    def load_dataset(file_path):
+    def get_dataset(self):
+        """
+        Get dataset in self.recipes.
+        :return: DataFrame with recipes.
+        """
+        return self.recipes
+
+    def load_dataset(self, file_path):
         """
         Load dataset from a csv file.
         :return: DataFrame with recipes.
         """
+
+        for root, dirs, files in os.walk('..'):
+            if file_path in files:
+                file_path = os.path.join(root, file_path)
+                break
+
         total_rows = sum(1 for _ in open(file_path)) - 1
         chunk_size=total_rows//50 + 1
 
@@ -32,7 +46,7 @@ class CSVHandler:
         """
         filtered = self.recipes
         for key, value in filters.items():
-            if value in filtered.columns:
+            if key in filtered.columns:
                 filtered = filtered[filtered[key] == value]
 
         return filtered

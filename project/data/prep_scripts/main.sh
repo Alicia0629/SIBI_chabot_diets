@@ -1,0 +1,5 @@
+mkdir ../datasets
+python3 createDatasetAllergies.py
+python3 dowloadFoodDataset.py
+
+python3 newFoodDataset.py
