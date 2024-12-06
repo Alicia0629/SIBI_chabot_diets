@@ -1,5 +1,10 @@
 import streamlit as st
 
+from agents.verify_data_agent import VerifyDataAgent
+
+verify_agent = VerifyDataAgent()
+
+
 st.title("Recomendador de comidas")
 
 if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' not in st.session_state or 'sexo' not in st.session_state or 'deporte' not in st.session_state or 'objetivo' not in st.session_state:
@@ -47,7 +52,8 @@ if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' 
     col1,col2,col3 = st.columns([1,90,1]) 
     with col2:
         if st.button("Siguiente", use_container_width=True):
-            if altura > 50 and peso > 1:
+            coherentData = verify_agent.verify_data(edad, altura, peso)
+            if coherentData:
                 st.session_state.edad = edad
                 st.session_state.altura = altura
                 st.session_state.peso = peso
@@ -57,7 +63,7 @@ if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' 
                 st.session_state.allergies = allergies
                 st.rerun()
             else:
-                st.warning("Por favor, completa todos los campos.")
+                st.warning("Los campos no tienen coherencia.")
 
 if 'edad' in st.session_state and 'altura' in st.session_state and 'peso' in st.session_state and 'sexo' in st.session_state and 'deporte' in st.session_state and 'objetivo' in st.session_state:
     st.subheader("Chat con AI")
