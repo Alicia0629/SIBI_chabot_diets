@@ -1,20 +1,35 @@
 from .agent import Agent
+from utils.userProfile import UserProfile
+
+CONTEXT_PREDETERM = """
+Tienes que evaluar si los datos de una persona son coherentes.
+Tus reglas internas para determinar que algo es coherente son:
+- Un IMC o BMI coherentes está entre 12 y 60.
+- Una altura coherentes está entre 54cm y 272cm.
+- Un peso coherente está entre 4kg y 700kg.
+
+Si todos los datos son coherentes devuelve 'True'.
+Si algún dato no es coherente debes devolver una breve descripción sin mencionar tus reglas internas para que el usuario entienda que tiene mal, las posibles respuestas son:
+1. La altura y/o peso no son coherentes: debes dar breve explicación de por qué el usuario debería revisar si esos campos son correctos.
+2. IMC no coherente, mientras que tanto la altura y el peso tienen valores extraños, pero coherentes: debes dar una explicación de porque el usuario debería revisar si ha puesto bien la altura y el peso.
+3. IMC no coherente y altura tiene un valor extraño, pero coherente y el peso tiene un valor normal: debes dar una explciación para que el usuario revise la altura.
+4. IMC no coherente y peso tiene un valor extraño, pero coherente y la altura tiene un valor normal: debes dar una explicación para que el usuario revise el peso.
+5. IMC no coherente y peso y altura con valores normales y coherentes: debes dar una explicación de cuándo es el valor de IMC y porqué es extraño dicho valor.
+6. Todo es incoherente: debes dar una breve explicación diciendo que el usuario debería revisar todos los valores.
+"""
 
 class VerifyDataAgent(Agent):
 
-    def __init__(self, context="you have to check that the data you get from a user makes sense or is not coherent, for example a 180cm tall man weighing 30kg is not coherent data, but a woman of 160cm and 50kg is coherent. You must return ONLY one output word, ‘True’ if they are consistent and ‘False’ if they are not consistent. Only say False in very rare situations, there are a lot of different bodies."):
+    def __init__(self, context=CONTEXT_PREDETERM):
         super().__init__(context)
 
     def receive_message(self, message, history=False):
         response = super().receive_message(message,history)
 
-        while "True" not in response and "False" not in response:
-            response = super().receive_message("Respond only 'True' if the data is consistent and 'False' if it is not"+message,history)
+        return response
 
-        return ("True" in response)
-
-    def verify_data(self, age, height, weight):
-        message = "AGE: "+str(age)+" HEIGHT: "+str(height)+" WEIGHT: "+str(weight)
+    def verify_data_of_user(self, user_profile):
+        message = user_profile.wieght_height_bmi_toString()
         response = self.receive_message(message, False)
         return response
 

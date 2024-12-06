@@ -1,5 +1,5 @@
 import streamlit as st
-
+from utils.userProfile import UserProfile
 from agents.verify_data_agent import VerifyDataAgent
 
 verify_agent = VerifyDataAgent()
@@ -52,8 +52,9 @@ if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' 
     col1,col2,col3 = st.columns([1,90,1]) 
     with col2:
         if st.button("Siguiente", use_container_width=True):
-            coherentData = verify_agent.verify_data(edad, altura, peso)
-            if coherentData:
+            user_profile = UserProfile(allergies=allergies, sex=sexo, age=edad, height=altura, weight=peso, sportLevel=deporte, objective=objetivo)
+            coherentData = verify_agent.verify_data_of_user(user_profile)
+            if ("True" in coherentData):
                 st.session_state.edad = edad
                 st.session_state.altura = altura
                 st.session_state.peso = peso
@@ -63,7 +64,7 @@ if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' 
                 st.session_state.allergies = allergies
                 st.rerun()
             else:
-                st.warning("Los campos no tienen coherencia.")
+                st.warning(coherentData)
 
 if 'edad' in st.session_state and 'altura' in st.session_state and 'peso' in st.session_state and 'sexo' in st.session_state and 'deporte' in st.session_state and 'objetivo' in st.session_state:
     st.subheader("Chat con AI")

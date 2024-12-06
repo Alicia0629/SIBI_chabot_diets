@@ -306,6 +306,19 @@ class UserProfile:
         """
         return self._maxKcal
     
+
+    
+    def wieght_height_bmi_toString(self) -> str:
+        """
+        Returns a string representation of the user's profile weight, height and bmi.
+        
+        Returns:
+            str: A string containing the user profile details of weight, height and bmi.
+        """
+        return (f"Height: {self.getHeight()} cm\n"
+                f"Weight: {self.getWeight()} kg\n"
+                f"BMI: {self.getBMI()} ({self.getBMIType()})\n")
+    
     def toString(self) -> str:
         """
         Returns a string representation of the user's profile.
