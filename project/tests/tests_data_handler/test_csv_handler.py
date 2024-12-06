@@ -1,5 +1,4 @@
 import pytest
-import pandas as pd
 import sys
 import os
 
@@ -53,3 +52,7 @@ def test_get_recipe_by_id(sample_csv_data):
     recipe = handler.get_recipe_details(38)
     assert recipe["Name"] == "Low-Fat Berry Blue Frozen Dessert", "The recipe name should match the expected value"
 
+def test_get_recipe_empty(sample_csv_data):
+    handler = CSVHandler(sample_csv_data)
+    recipe = handler.get_recipe_details(0)
+    assert recipe == None
