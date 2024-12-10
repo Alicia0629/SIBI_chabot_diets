@@ -29,7 +29,7 @@ class VerifyDataAgent(Agent):
         return response
 
     def verify_data_of_user(self, user_profile):
-        message = user_profile.wieght_height_bmi_toString()
+        message = user_profile.weight_height_bmi_toString()
         response = self.receive_message(message, False)
         return response
 

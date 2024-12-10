@@ -308,7 +308,7 @@ class UserProfile:
     
 
     
-    def wieght_height_bmi_toString(self) -> str:
+    def weight_height_bmi_toString(self) -> str:
         """
         Returns a string representation of the user's profile weight, height and bmi.
         

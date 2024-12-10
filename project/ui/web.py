@@ -1,13 +1,14 @@
 import streamlit as st
 from utils.userProfile import UserProfile
 from agents.verify_data_agent import VerifyDataAgent
+from agents.def_user_agent import DefUserAgent
 
 verify_agent = VerifyDataAgent()
-
+def_user_agent = DefUserAgent()
 
 st.title("Recomendador de comidas")
 
-if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' not in st.session_state or 'sexo' not in st.session_state or 'deporte' not in st.session_state or 'objetivo' not in st.session_state:
+if 'user' not in st.session_state:
     st.subheader("Porfavor inserta tus datos personales, para que podamos recomendarte mejor tus dietas.")
     col1, col2, col3, col4 = st.columns([6,2,6,10])  
     with col3:
@@ -55,32 +56,24 @@ if 'edad' not in st.session_state or 'altura' not in st.session_state or 'peso' 
             user_profile = UserProfile(allergies=allergies, sex=sexo, age=edad, height=altura, weight=peso, sportLevel=deporte, objective=objetivo)
             coherentData = verify_agent.verify_data_of_user(user_profile)
             if ("True" in coherentData):
-                st.session_state.edad = edad
-                st.session_state.altura = altura
-                st.session_state.peso = peso
-                st.session_state.sexo = sexo
-                st.session_state.deporte = deporte
-                st.session_state.objetivo = objetivo
-                st.session_state.allergies = allergies
+                st.session_state.user = user_profile
                 st.rerun()
             else:
                 st.warning(coherentData)
 
-if 'edad' in st.session_state and 'altura' in st.session_state and 'peso' in st.session_state and 'sexo' in st.session_state and 'deporte' in st.session_state and 'objetivo' in st.session_state:
-    st.subheader("Chat con AI")
-    #st.write(f"Edad: {st.session_state.edad}")
-    #st.write(f"Altura: {st.session_state.altura} cm")
-    #st.write(f"Peso: {st.session_state.peso} kg")
-    #st.write(f"Sexo: {st.session_state.sexo}")
-    #st.write(f"Deporte: {st.session_state.deporte}")
-    #st.write(f"Objetivo: {st.session_state.objetivo}")
-    #st.write("Alergias seleccionadas:")
-    #st.write(st.session_state.allergies)
+if 'user' in st.session_state:
+    st.subheader("Haz tus preguntas sobre dietética a la IA")
+    col1, col2 = st.columns([1,3])  
 
-    user_input = st.text_input("Escribe tu mensaje...")
+    with col2:
+        user_input = st.text_input("Escribe tu mensaje...")
 
-    if user_input:
-        st.write(f"Usuario: {user_input}")
-        ai_response = "Proximamente :)"
-        st.write(f"AI: {ai_response}")
+        if user_input:
+            st.write(f"Usuario: {user_input}")
+            ai_response = "Proximamente :)"
+            st.write(f"AI: {ai_response}")
+    
+    with col1:
+        st.subheader("Tú perfil")
+        st.write(def_user_agent.define_user(st.session_state.user))
 

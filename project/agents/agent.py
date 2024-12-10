@@ -1,10 +1,11 @@
 import cohere
+from config import KEY_COHERE, MODEL_COHERE
 
-co = cohere.ClientV2("uaKqA3f71SNU2dY1OYG86qkoztVtn8imdRdwl9ar")
+co = cohere.ClientV2(KEY_COHERE)
 
 class Agent:
     def __init__(self, context="You are a nutrition assistant"):
-        self.model = "command-r-plus-08-2024"
+        self.model = MODEL_COHERE
         self.messages = [{'role':'system', 'content':context}]
         self.context = context
 
