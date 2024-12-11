@@ -29,7 +29,11 @@ class VerifyDataAgent(Agent):
         return response
 
     def verify_data_of_user(self, user_profile):
-        message = user_profile.weight_height_bmi_toString()
-        response = self.receive_message(message, False)
-        return response
+        if user_profile.getBMI() < 12 or user_profile.getBMI() > 60 or user_profile.getHeight() < 54 or user_profile.getHeight() > 272 or user_profile.getWeight() < 4 or user_profile.getWeight() > 700:
+            message = user_profile.weight_height_bmi_toString()
+            print(message)
+            response = self.receive_message(message, False)
+            return response
+        else:
+            return 'True'
 

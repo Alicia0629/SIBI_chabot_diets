@@ -62,18 +62,15 @@ if 'user' not in st.session_state:
                 st.warning(coherentData)
 
 if 'user' in st.session_state:
+    st.subheader("Tú perfil")
+    st.write(def_user_agent.define_user(st.session_state.user))
+
     st.subheader("Haz tus preguntas sobre dietética a la IA")
-    col1, col2 = st.columns([1,3])  
-
-    with col2:
-        user_input = st.text_input("Escribe tu mensaje...")
-
-        if user_input:
+    user_input = st.text_input("Escribe tu mensaje...")
+    if user_input:
             st.write(f"Usuario: {user_input}")
             ai_response = "Proximamente :)"
             st.write(f"AI: {ai_response}")
     
-    with col1:
-        st.subheader("Tú perfil")
-        st.write(def_user_agent.define_user(st.session_state.user))
+       
 

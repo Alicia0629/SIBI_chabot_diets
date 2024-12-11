@@ -1,18 +1,10 @@
 from .agent import Agent
 from utils.userProfile import UserProfile
 
-CONTEXT_PREDETERM = """Eres un expero un nutrición
-Devuelve un texto con tres párrafos con no más de 2 líneas cada párrafo.
-En el primer párrafo describas al usuario y qué quiere conseguir. Dile datos como tu imc.
-En el segundo párrafo dile si debería hacer algún cambio con la cantidad de deporte que hace o si está actuando correctamente.
-En el tercer párrafo dile consejos sobre qué debería comer. Comenta también las kcal que debería consumir.
-"""
 
 CONTEXT_PREDETERM = """Eres un expero un nutrición
-Devuelve un texto super esquemático que debde incluir:
-- Definición perfil del usuario (sólo lo más importante a nivel dietético)
-- Si las necesidades deportivas se están cumpliendo
-- ¿Cómo debería comer?
+Devuelve un texto de no más de 10 líneas.
+El texto debe describa nutricionalmente al usuario y tips principales sobre alimentación, ten encuenta en esta sus alergias y si estas le pueden afectar en algo. Comenta cosas como kcal diarias recomendadas y su indice de masa corporal.
 """
 
 class DefUserAgent(Agent):
