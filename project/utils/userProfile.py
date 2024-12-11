@@ -18,7 +18,6 @@ class UserProfile:
             weight (float): Weight of the user (in kilograms).
             sportLevel (str): User's activity level.
             objective (str): User's goal (e.g., "Mantenerme sano", "Ganar músculo", "Adelgazar").
-            updateBMI (bool): Whether to update BMI (default True).
         """
         self.setAllergies(allergies)
         self.setSex(sex, False)
@@ -27,9 +26,44 @@ class UserProfile:
         self.setObjective(objective, False)
         self.setHeight(height, False, False)
         self.setWeight(weight, False, False)
+        self._definition = None
 
         self.updateBMI()
         self.updateKcalRecommended()
+
+    def clone(self):
+        """
+        Creates and returns a copy of the current object.
+        """
+        return UserProfile(
+            allergies=self.getAllergies(),
+            sex=self.getSex(),
+            age=self.getAge(),
+            height=self.getHeight(),
+            weight=self.getWeight(),
+            sportLevel=self.getSportLevelString(),
+            objective=self.getObjectiveString()
+        )
+    
+    def updateFromUserProfile(self, other_user: "UserProfile"):
+        """
+        Updates all attributes of the current user profile with the attributes of another user profile.
+
+        Parameters:
+            other_user (UserProfile): Another UserProfile instance from which to copy data.
+        """
+        self.setAllergies(other_user.getAllergies())
+        self.setSex(other_user.getSex(), updateKcal=False)
+        self.setAge(other_user.getAge(), updateKcal=False)
+        self.setHeight(other_user.getHeight(), updateKcal=False, updateBMI=False)
+        self.setWeight(other_user.getWeight(), updateKcal=False, updateBMI=False)
+        self.setSportLevel(other_user.getSportLevelString(), updateKcal=False)
+        self.setObjective(other_user.getObjectiveString(), updateKcal=False)
+        self._definition = None
+
+        self.updateBMI()
+        self.updateKcalRecommended()
+
 
     def setAllergies(self, allergies: dict):
         """
@@ -173,6 +207,19 @@ class UserProfile:
         if updateKcal:
             self.updateKcalRecommended()
 
+    def setSportLevelInt(self, sportLevel: int, updateKcal: bool = True):
+        """
+        Sets the user's activity level.
+
+        Parameters:
+            sportLevel (int): The user's activity level (1,2,3,4,5).
+            updateKcal (bool): Whether to update the recommended caloric intake (default True).
+        """
+        assert 1 <= sportLevel <= 5
+        self._sportLevel = sportLevel
+        if updateKcal:
+            self.updateKcalRecommended()
+
     def getSportLevel(self) -> int:
         """
         Returns the user's activity level.
@@ -212,6 +259,20 @@ class UserProfile:
             "Adelgazar": -1
         }
         self._objetive = goal_map.get(objective)
+
+        if updateKcal:
+            self.updateKcalRecommended()
+
+    def setObjectiveInt(self, objective: int, updateKcal: bool = True):
+        """
+        Sets the user's goal.
+
+        Parameters:
+            objective (int): The user's goal. (-1,0,1)
+            updateKcal (bool): Whether to update the recommended caloric intake (default True).
+        """
+        
+        self._objetive = objective
 
         if updateKcal:
             self.updateKcalRecommended()
@@ -305,6 +366,21 @@ class UserProfile:
             float: The maximum daily caloric intake.
         """
         return self._maxKcal
+    
+    def setDefinition(self, definition):
+        """
+        Set's a definition for the profile of the user.
+        """
+        self._definition = definition
+    
+    def getDefinition(self):
+        """
+        Return the user's definition of profile.
+
+        Returns:
+            str: A string containing the definition of the user.
+        """
+        return self._definition
     
 
     

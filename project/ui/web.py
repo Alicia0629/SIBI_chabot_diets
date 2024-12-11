@@ -1,10 +1,13 @@
 import streamlit as st
 from utils.userProfile import UserProfile
+from utils.change_profile import changeData
 from agents.verify_data_agent import VerifyDataAgent
 from agents.def_user_agent import DefUserAgent
+from agents.detect_change_data_agent import DetectChangeDataAgent
 
 verify_agent = VerifyDataAgent()
 def_user_agent = DefUserAgent()
+detect_change_data_agent = DetectChangeDataAgent()
 
 st.title("Recomendador de comidas")
 
@@ -14,7 +17,7 @@ if 'user' not in st.session_state:
     with col3:
         sexo = st.radio("Sexo", ["Masculino", "Femenino"])
         edad = st.slider("Edad", min_value=18, max_value=120, value=18)
-        altura = st.slider("Altura (cm)", min_value=50, max_value=250, value=50)
+        altura = st.slider("Altura (cm)", min_value=50, max_value=250, value=167)
         peso = st.number_input("Peso (kg)", min_value=1.0, max_value=300.0, step=1.0, format="%.1f")
 
 
@@ -63,13 +66,28 @@ if 'user' not in st.session_state:
 
 if 'user' in st.session_state:
     st.subheader("Tú perfil")
-    st.write(def_user_agent.define_user(st.session_state.user))
+    if st.session_state.user.getDefinition() is None:
+        st.session_state.user.setDefinition(def_user_agent.define_user(st.session_state.user))
+
+    st.write(st.session_state.user.getDefinition())
 
     st.subheader("Haz tus preguntas sobre dietética a la IA")
     user_input = st.text_input("Escribe tu mensaje...")
     if user_input:
+            ai_response = ""
             st.write(f"Usuario: {user_input}")
-            ai_response = "Proximamente :)"
+
+            #Analyse the message to see if there have been any changes
+            analyse_change_data=detect_change_data_agent.analyse_message(message=user_input, user_profile=st.session_state.user)
+            if 'false' not in analyse_change_data.lower():
+                coherent = changeData(userProfile=st.session_state.user, AIMessage=analyse_change_data)
+                if 'true' not in coherent:
+                    ai_response = "Error cambiando datos: '"+coherent+"'"
+            
+            #Create response
+            if len(ai_response) < 1:
+                process = "Proximamente :)"
+                ai_response = process
             st.write(f"AI: {ai_response}")
     
        
