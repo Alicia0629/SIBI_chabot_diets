@@ -65,15 +65,17 @@ if 'user' not in st.session_state:
                 st.warning(coherentData)
 
 if 'user' in st.session_state:
-    st.subheader("Tú perfil")
-    if st.session_state.user.getDefinition() is None:
-        st.session_state.user.setDefinition(def_user_agent.define_user(st.session_state.user))
+    col1, col2 = st.columns([1, 1]) 
+    user = st.session_state.user
 
-    st.write(st.session_state.user.getDefinition())
+    if user.getDefinition() is None or st.session_state.get("profile_updated", False):
+        user.setDefinition(def_user_agent.define_user(user))
+        st.session_state["profile_updated"] = False 
 
-    st.subheader("Haz tus preguntas sobre dietética a la IA")
-    user_input = st.text_input("Escribe tu mensaje...")
-    if user_input:
+    with col2:
+        st.subheader("Haz tus preguntas sobre dietética a la IA")
+        user_input = st.text_input("Escribe tu mensaje...")
+        if user_input:
             ai_response = ""
             st.write(f"Usuario: {user_input}")
 
@@ -81,14 +83,26 @@ if 'user' in st.session_state:
             analyse_change_data=detect_change_data_agent.analyse_message(message=user_input, user_profile=st.session_state.user)
             if 'false' not in analyse_change_data.lower():
                 coherent = changeData(userProfile=st.session_state.user, AIMessage=analyse_change_data)
-                if 'true' not in coherent:
+                print(coherent)
+                if 'true' not in coherent.lower():
                     ai_response = "Error cambiando datos: '"+coherent+"'"
-            
+                else:
+                    st.session_state["profile_updated"] = True
+                    st.success("Datos del usuario actualizados.")
+
             #Create response
             if len(ai_response) < 1:
                 process = "Proximamente :)"
                 ai_response = process
             st.write(f"AI: {ai_response}")
     
+    with col1:
+        user = st.session_state.user
+
+        if user.getDefinition() is None or st.session_state.get("profile_updated", False):
+            user.setDefinition(def_user_agent.define_user(user))
+            st.session_state["profile_updated"] = False 
+
+        st.write(user.getDefinition())
        
 

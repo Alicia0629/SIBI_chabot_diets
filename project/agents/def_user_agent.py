@@ -9,15 +9,15 @@ El texto debe describa nutricionalmente al usuario y tips principales sobre alim
 
 class DefUserAgent(Agent):
 
-    def __init__(self, context=CONTEXT_PREDETERM):
+    def __init__(self, context:str=CONTEXT_PREDETERM)->None:
         super().__init__(context)
 
-    def receive_message(self, message, history=False):
+    def receive_message(self, message:str, history:bool=False)->str:
         response = super().receive_message(message,history)
 
         return response
 
-    def define_user(self, user_profile):
+    def define_user(self, user_profile:UserProfile)->str:
         message = user_profile.toString()
         response = self.receive_message(message, False)
         return response
