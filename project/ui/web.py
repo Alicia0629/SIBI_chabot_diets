@@ -83,7 +83,6 @@ if 'user' in st.session_state:
             analyse_change_data=detect_change_data_agent.analyse_message(message=user_input, user_profile=st.session_state.user)
             if 'false' not in analyse_change_data.lower():
                 coherent = changeData(userProfile=st.session_state.user, AIMessage=analyse_change_data)
-                print(coherent)
                 if 'true' not in coherent.lower():
                     ai_response = "Error cambiando datos: '"+coherent+"'"
                 else:

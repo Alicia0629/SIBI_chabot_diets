@@ -25,12 +25,10 @@ def changeData(userProfile:UserProfile, AIMessage:str):
     updates = {}
     for pair in pairs:
         if pair.strip():
-            print(pair)
             key = pair.split("]")[0][1:].strip()
             value = pair.split("]")[1].strip()
             value = value.replace("[","")
             updates[key] = value
-    print(updates)
 
     if "allergies" in updates:
         oldAllergies = newProfile.getAllergies()
@@ -62,14 +60,32 @@ def changeData(userProfile:UserProfile, AIMessage:str):
 
     if "sportLevel" in updates:
         try:
-            newProfile.setSportLevelInt(int(extract_numbers(updates["sportLevel"])), True)
+            if "1" in str(updates["sportLevel"]):
+                newProfile.setSportLevelInt(1)
+            elif "2" in str(updates["sportLevel"]):
+                newProfile.setSportLevelInt(2)
+            elif "3" in str(updates["sportLevel"]):
+                newProfile.setSportLevelInt(3)
+            elif "4" in str(updates["sportLevel"]):
+                newProfile.setSportLevelInt(4)
+            elif "5" in str(updates["sportLevel"]):
+                newProfile.setSportLevelInt(5)
+            else:
+                newProfile.setSportLevelInt(int(extract_numbers(updates["sportLevel"])), True)
         except:
             frase = text_similarity(phrase=updates["sportLevel"], texts=sport_list)
             newProfile.setSportLevel(frase, True)
 
     if "objective" in updates:
         try:
-            newProfile.setObjectiveInt(int(extract_numbers(updates["objective"])), True)
+            if "-1" in str(updates["objective"]):
+                newProfile.setObjectiveInt(-1,True)
+            elif "0" in str(updates["objective"]):
+                newProfile.setObjective(0,True)
+            elif "1" in str(updates["objective"]):
+                newProfile.setObjective(1,True)
+            else:
+                newProfile.setObjectiveInt(int(extract_numbers(updates["objective"])), True)
         except:
             frase = text_similarity(phrase=updates["objective"], texts=goal_list)
             newProfile.setObjective(frase, True)
