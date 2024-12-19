@@ -47,8 +47,8 @@ class CSVHandler:
         """
         filtered = self.recipes
         for key, value in filters.items():
-            if key in filtered.columns:
-                filtered = filtered[filtered[key] == value]
+            if value:
+                filtered = filtered[filtered[key] != value]
 
         return filtered
 
