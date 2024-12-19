@@ -26,7 +26,8 @@ class CSVHandler:
                 break
 
         total_rows = sum(1 for _ in open(file_path)) - 1
-        chunk_size=total_rows//50 + 1
+        #chunk_size=total_rows//50 + 1
+        chunk_size = 500
 
         chunks = []
         with tqdm(total=total_rows, desc="Loading CSV") as pbar:
