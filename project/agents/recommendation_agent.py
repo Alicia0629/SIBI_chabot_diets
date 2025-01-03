@@ -10,28 +10,27 @@ class RecommendationAgent(Agent):
         self.vectorizer = Vectorizer(self.dataset)
         self.dietary_restrictions = {}
 
-    def update_filters(self, new_filters):
+    def update_filters(self, dietary_restrictions):
         """
         Update the dietary restrictions filters.
-        :param new_filters: Dictionary containing new dietary restrictions.
+        :param dietary_restrictions: Dictionary containing new dietary restrictions.
         """
-        self.dietary_restrictions.update(new_filters)
-        print("Filters updated:", self.dietary_restrictions)
+        if not(dietary_restrictions is None or dietary_restrictions==self.dietary_restrictions):
+            self.dietary_restrictions = dietary_restrictions 
+
+            filtered_recipes = self.csv_handler.filter_recipes(dietary_restrictions)
+
+            if filtered_recipes.empty:
+                return "No recipes match your dietary restrictions."
+
+            self.vectorizer = Vectorizer(filtered_recipes)
 
     def filter_and_recommend(self, user_input, dietary_restrictions=None):
         """
         Get a recommendation based on user input and filter recipes by dietary restrictions.
         If no dietary restrictions are passed, it uses the agent's current filters.
         """
-        if dietary_restrictions is None:
-            dietary_restrictions = self.dietary_restrictions
-
-        filtered_recipes = self.csv_handler.filter_recipes(dietary_restrictions)
-
-        if filtered_recipes.empty:
-            return "No recipes match your dietary restrictions."
-
-        self.vectorizer = Vectorizer(filtered_recipes)
+        self.update_filters(dietary_restrictions=dietary_restrictions)
 
         recommendations = self.vectorizer.search(user_input, k=3)
 
@@ -60,18 +59,32 @@ class RecommendationAgent(Agent):
             ]
         )
 
-        #recommendations_text = "\n".join(
-        #    [f"- {row['Name']}" for _, row in recommendations.iterrows()]
-        #)
 
         return recommendations_text
+
+    def refine_prompt(self, user_input):
+        """
+        Get the user input and changes the text to obtain a valid text for the rag
+        """
+        return super().receive_message(message=f"Refine this prompt to focus on the text we are going to send the RAG, wirte only the new prompt: {user_input}",history=False)
+        
 
     def chat_and_recommend(self, user_input, dietary_restrictions=None):
         """
         Combines chat-based interaction and filtered recommendation system.
         """
+        # Create new prompt to the RAG
+        prompt = self.refine_prompt(user_input=user_input)
+
         # Get recommendation based on user input and current filters
-        recommendations = self.filter_and_recommend(user_input, dietary_restrictions)
+        recommendations = self.filter_and_recommend(prompt, dietary_restrictions)
+
+        # Get array of allergies
+        allergies = "El usuario tiene las alergias: '"
+        for key, value in dietary_restrictions.items():
+            if value:
+                allergies += key.lower().replace("has","")+", "
+        allergies += "'"
 
         # Return both the agent's response and the recipe recommendations
-        return super().receive_message(message=f"User input: '{user_input}', AI recommendation: {recommendations}",history=False)
+        return super().receive_message(message=f"Devuelve respuesta en español. Usuario dice: '{user_input}',{allergies}, recomendación de la ia: {recommendations}",history=False)

@@ -19,6 +19,7 @@ allergies_list = ["HasDairy","HasGluten", "HasEgg", "HasFish", "HasShellfish","H
 boolean_list = ["True", "False"]
 
 def changeData(userProfile:UserProfile, AIMessage:str):
+
     newProfile = userProfile.clone()
     
     pairs = AIMessage.split(";")
@@ -32,7 +33,13 @@ def changeData(userProfile:UserProfile, AIMessage:str):
 
     if "allergies" in updates:
         oldAllergies = newProfile.getAllergies()
-        updateAllergies = ast.literal_eval(updates["allergies"])
+        try:
+            updateAllergies = ast.literal_eval(updates["allergies"])
+        except:
+            updateAllergies = {}
+            for allergy in allergies_list:
+                if allergy in updates["allergies"]:
+                    updateAllergies[allergy] = True
         newAllergies = {}
         for key, value in oldAllergies.items():
             newAllergies[key] = value

@@ -1,13 +1,22 @@
 import streamlit as st
 from utils.userProfile import UserProfile
 from utils.change_profile import changeData
-from agents.verify_data_agent import VerifyDataAgent
-from agents.def_user_agent import DefUserAgent
-from agents.detect_change_data_agent import DetectChangeDataAgent
+from agents import VerifyDataAgent, DefUserAgent, DetectChangeDataAgent, RecommendationAgent, VerifyDataAgent
 
-verify_agent = VerifyDataAgent()
-def_user_agent = DefUserAgent()
-detect_change_data_agent = DetectChangeDataAgent()
+if 'verify_agent' not in st.session_state:
+    st.session_state['verify_agent'] = VerifyDataAgent()
+if 'def_user_agent' not in st.session_state:
+    st.session_state['def_user_agent'] = DefUserAgent()
+if 'detect_change_data_agent' not in st.session_state:
+    st.session_state['detect_change_data_agent'] = DetectChangeDataAgent()
+if 'recomend_agent' not in st.session_state:
+    st.session_state['recomend_agent'] = RecommendationAgent()
+
+verify_agent = st.session_state['verify_agent']
+def_user_agent = st.session_state['def_user_agent']
+detect_change_data_agent = st.session_state['detect_change_data_agent']
+recomend_agent = st.session_state['recomend_agent']
+
 
 st.title("Recomendador de comidas")
 
@@ -60,6 +69,7 @@ if 'user' not in st.session_state:
             coherentData = verify_agent.verify_data_of_user(user_profile)
             if ("True" in coherentData):
                 st.session_state.user = user_profile
+                recomend_agent.update_filters(st.session_state.user.getAllergies())
                 st.rerun()
             else:
                 st.warning(coherentData)
@@ -91,7 +101,7 @@ if 'user' in st.session_state:
 
             #Create response
             if len(ai_response) < 1:
-                process = "Proximamente :)"
+                process = recomend_agent.chat_and_recommend(user_input, st.session_state.user.getAllergies())
                 ai_response = process
             st.write(f"AI: {ai_response}")
     
