@@ -20,7 +20,7 @@ def test_filter_recipes_by_allergen1(sample_csv_data):
     handler = CSVHandler(sample_csv_data)
     recipes = handler.get_dataset()
 
-    filters = {"HasDairy": False}
+    filters = {"HasDairy": True}
     filtered_recipes = handler.filter_recipes(filters)
 
     assert all(filtered_recipes["HasDairy"]==False), "All filtered recipes should not have dairy"
@@ -31,7 +31,7 @@ def test_filter_recipes_by_allergen2(sample_csv_data):
     handler = CSVHandler(sample_csv_data)
     recipes = handler.get_dataset()
 
-    filters = {"HasDairy": False, "HasEgg": False}
+    filters = {"HasDairy": True, "HasEgg": True}
     filtered_recipes = handler.filter_recipes(filters)
 
     assert all(filtered_recipes["HasDairy"]==False), "All filtered recipes should not have dairy"
@@ -41,10 +41,10 @@ def test_filter_recipes_by_allergen3(sample_csv_data):
     handler = CSVHandler(sample_csv_data)
     recipes = handler.get_dataset()
 
-    filters = {"HasDairy": True}
+    filters = {"HasDairy": False}
     filtered_recipes = handler.filter_recipes(filters)
 
-    assert all(filtered_recipes["HasDairy"]), "All filtered recipes should have dairy"
+    assert not(all(filtered_recipes["HasDairy"])) and not(all(filtered_recipes["HasDairy"]==False)), "The filtered recipes could have or not have dairy"
 
 
 def test_get_recipe_by_id(sample_csv_data):

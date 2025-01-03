@@ -47,7 +47,7 @@ def changeData(userProfile:UserProfile, AIMessage:str):
             if key not in allergies_list:
                 key = text_similarity(phrase=key, texts=allergies_list)
             if not isinstance(value, bool) and value not in boolean_list:
-                value = text_similarity(phrase=key, texts=boolean_list)
+                value = text_similarity(phrase=key, texts=boolean_list) == "True"
             if not isinstance(value, bool):
                 value = str(value) == "True"
             newAllergies[key] = value
@@ -88,15 +88,14 @@ def changeData(userProfile:UserProfile, AIMessage:str):
             if "-1" in str(updates["objective"]):
                 newProfile.setObjectiveInt(-1,True)
             elif "0" in str(updates["objective"]):
-                newProfile.setObjective(0,True)
+                newProfile.setObjectiveInt(0,True)
             elif "1" in str(updates["objective"]):
-                newProfile.setObjective(1,True)
+                newProfile.setObjectiveInt(1,True)
             else:
                 newProfile.setObjectiveInt(int(extract_numbers(updates["objective"])), True)
         except:
             frase = text_similarity(phrase=updates["objective"], texts=goal_list)
             newProfile.setObjective(frase, True)
-
     verify_agent = VerifyDataAgent()
     coherent = verify_agent.verify_data_of_user(newProfile)
 

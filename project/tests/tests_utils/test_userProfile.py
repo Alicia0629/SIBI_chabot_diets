@@ -117,3 +117,13 @@ Sport Level: Ejercicio moderado (3-5 días a la semana)
 Objective: Adelgazar
 BMI: 22.857142857142858 (Peso ideal)
 Recommended Caloric Intake: 1916.671875 - 2300.00625 kcal"""
+
+def test_definition(user_profile):
+    user_profile.setDefinition("Pesas poco y quieres ganar músculo, debes comer más proteina.")
+    assert user_profile.getDefinition() == "Pesas poco y quieres ganar músculo, debes comer más proteina."
+
+def test_weight_height_bmi_toString(user_profile):
+    assert user_profile.weight_height_bmi_toString() == """Height: 175 cm
+Weight: 70 kg
+BMI: 22.857142857142858 (Peso ideal)
+"""

@@ -114,25 +114,38 @@ dependencies:
   - zlib=1.2.13=h5eee18b_1
   - zstd=1.5.6=hc292b87_0
   - pip:
+    - aiofiles==24.1.0
     - altair==5.0.1
     - annotated-types==0.7.0
     - anyio==4.6.2.post1
     - attrs==24.2.0
+    - backoff==2.2.1
+    - beautifulsoup4==4.12.3
     - blinker==1.6.2
     - bottleneck==1.4.2
     - brotli==1.0.9
     - cachetools==5.3.3
     - certifi==2024.8.30
+    - cffi==1.17.1
+    - chardet==5.2.0
     - click==8.1.7
     - cohere==5.11.4
     - contourpy==1.2.0
+    - coverage==7.6.1
+    - cryptography==44.0.0
+    - dataclasses-json==0.6.7
+    - emoji==2.14.0
+    - eval-type-backport==0.2.0
     - faiss-cpu==1.9.0.post1
     - fastavro==1.9.7
     - filelock==3.16.1
+    - filetype==1.2.0
     - fonttools==4.51.0
     - fsspec==2024.10.0
     - gitpython==3.1.43
     - h11==0.14.0
+    - hnswlib==0.8.0
+    - html5lib==1.1
     - httpcore==1.0.7
     - httpx==0.27.2
     - httpx-sse==0.4.0
@@ -140,19 +153,26 @@ dependencies:
     - idna==3.7
     - jinja2==3.1.4
     - joblib==1.4.2
+    - jsonpath-python==1.0.6
     - jsonschema==4.23.0
     - jsonschema-specifications==2023.7.1
     - kagglehub==0.3.4
     - kiwisolver==1.4.4
+    - langdetect==1.0.9
+    - lxml==5.3.0
     - markdown-it-py==2.2.0
     - markupsafe==2.1.3
+    - marshmallow==3.23.1
     - matplotlib==3.9.2
     - mdurl==0.1.0
     - mkl-fft==1.3.11
     - mkl-random==1.2.8
     - mkl-service==2.4.0
     - mpmath==1.3.0
+    - mypy-extensions==1.0.0
+    - nest-asyncio==1.6.0
     - networkx==3.4.2
+    - nltk==3.9.1
     - numexpr==2.10.1
     - numpy==1.26.4
     - nvidia-cublas-cu12==12.4.5.8
@@ -167,6 +187,7 @@ dependencies:
     - nvidia-nccl-cu12==2.21.5
     - nvidia-nvjitlink-cu12==12.4.127
     - nvidia-nvtx-cu12==12.4.127
+    - olefile==0.47
     - packaging==24.1
     - pandas==2.2.2
     - parameterized==0.9.0
@@ -175,22 +196,31 @@ dependencies:
     - pluggy==1.5.0
     - ply==3.11
     - protobuf==4.25.3
+    - psutil==6.1.0
     - pyarrow==16.1.0
-    - pydantic==2.10.1
-    - pydantic-core==2.27.1
+    - pycparser==2.22
+    - pydantic==2.9.2
+    - pydantic-core==2.23.4
     - pydeck==0.8.0
     - pygments==2.15.1
     - pyparsing==3.1.2
+    - pypdf==5.1.0
     - pyqt5==5.15.10
     - pyqt5-sip==12.13.0
     - pysocks==1.7.1
     - pytest==7.4.4
+    - pytest-cov==6.0.0
     - python-dateutil==2.9.0.post0
+    - python-iso639==2024.10.22
+    - python-magic==0.4.27
+    - python-oxmsg==0.0.1
     - pytz==2024.1
     - pyyaml==6.0.2
+    - rapidfuzz==3.10.1
     - referencing==0.30.2
     - regex==2024.11.6
     - requests==2.32.3
+    - requests-toolbelt==1.0.0
     - rich==13.7.1
     - rpds-py==0.10.6
     - safetensors==0.4.5
@@ -200,6 +230,7 @@ dependencies:
     - setuptools==75.1.0
     - sip==6.7.12
     - sniffio==1.3.1
+    - soupsieve==2.6
     - streamlit==1.40.1
     - sympy==1.13.1
     - tenacity==8.2.3
@@ -213,8 +244,13 @@ dependencies:
     - triton==3.1.0
     - types-requests==2.32.0.20241016
     - typing-extensions==4.12.2
+    - typing-inspect==0.9.0
     - unicodedata2==15.1.0
+    - unstructured==0.16.9
+    - unstructured-client==0.28.1
     - urllib3==2.2.3
     - watchdog==4.0.1
+    - webencodings==0.5.1
     - wheel==0.44.0
+    - wrapt==1.17.0
 prefix: /home/alicia/anaconda3/envs/diet-recommender

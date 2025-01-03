@@ -11,10 +11,12 @@ class Agent:
 
     def receive_message(self, message:str, history:bool=True)->str:
         if history:
-            messages = self.messages.append({'role':'user', 'content':message})
+            self.messages.append({'role':'user', 'content':message})
+            print(self.messages)
+            messages = self.messages
         else:
             messages = [{'role':'system', 'content':self.context}, {'role':'user', 'content':message}]
-        
+                
         response = self.co.chat(model=self.model, messages=messages)
         
         if history:

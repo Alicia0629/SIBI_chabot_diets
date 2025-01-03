@@ -76,8 +76,6 @@ class Vectorizer:
             # Optionally, save the FAISS index
             faiss.write_index(self.index, self.index_file)
             print(f"FAISS index built and saved to {self.index_file}")
-        else:
-            print("Error: The embeddings are empty or not in the correct format. FAISS index cannot be built.")
 
     def search(self, query, k=5):
         """

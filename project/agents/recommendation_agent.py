@@ -4,10 +4,11 @@ from data.handler.csv_handler import CSVHandler
 from config import USING_RAG
 
 class RecommendationAgent(Agent):
-    def __init__(self, context="You are a dietary assistant that recommends meals based on user preferences and dietary restrictions."):
+    def __init__(self, context="You are a dietary assistant that recommends meals based on user preferences and dietary restrictions.",file="data/datasets/NewRecipes.csv", using_rag=USING_RAG):
         super().__init__(context)
-        if USING_RAG:
-            self.csv_handler = CSVHandler("data/datasets/NewRecipes.csv")
+        self.using_rag = using_rag
+        if self.using_rag:
+            self.csv_handler = CSVHandler(file)
             self.dataset = self.csv_handler.get_dataset()
             self.vectorizer = Vectorizer(self.dataset)
         self.dietary_restrictions = {}
@@ -20,7 +21,7 @@ class RecommendationAgent(Agent):
         if not(dietary_restrictions is None or dietary_restrictions==self.dietary_restrictions):
             self.dietary_restrictions = dietary_restrictions 
 
-            if USING_RAG:
+            if self.using_rag:
                 filtered_recipes = self.csv_handler.filter_recipes(dietary_restrictions)
 
                 if filtered_recipes.empty:
@@ -35,7 +36,7 @@ class RecommendationAgent(Agent):
         """
         self.update_filters(dietary_restrictions=dietary_restrictions)
 
-        if USING_RAG:
+        if self.using_rag:
             recommendations = self.vectorizer.search(user_input, k=3)
 
             recommendations_text = "\n\n".join(
@@ -80,7 +81,7 @@ class RecommendationAgent(Agent):
         Combines chat-based interaction and filtered recommendation system.
         """
         # Create new prompt to the RAG
-        if USING_RAG:
+        if self.using_rag:
             prompt = self.refine_prompt(user_input=user_input)
         else: 
             prompt = ""
