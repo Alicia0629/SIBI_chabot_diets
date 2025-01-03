@@ -91,19 +91,24 @@ if 'user' in st.session_state:
 
             #Analyse the message to see if there have been any changes
             analyse_change_data=detect_change_data_agent.analyse_message(message=user_input, user_profile=st.session_state.user)
+
             if 'false' not in analyse_change_data.lower():
                 coherent = changeData(userProfile=st.session_state.user, AIMessage=analyse_change_data)
                 if 'true' not in coherent.lower():
                     ai_response = "Error cambiando datos: '"+coherent+"'"
                 else:
                     st.session_state["profile_updated"] = True
+                    recomend_agent.update_filters(st.session_state.user.getAllergies())
                     st.success("Datos del usuario actualizados.")
+                    ai_response = " "
 
             #Create response
             if len(ai_response) < 1:
                 process = recomend_agent.chat_and_recommend(user_input, st.session_state.user.getAllergies())
                 ai_response = process
-            st.write(f"AI: {ai_response}")
+
+            if len(ai_response) != 1:
+                st.write(f"AI: {ai_response}")
     
     with col1:
         user = st.session_state.user

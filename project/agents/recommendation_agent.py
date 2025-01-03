@@ -1,13 +1,15 @@
 from .agent import Agent
 from data.handler.vectorizer import Vectorizer
 from data.handler.csv_handler import CSVHandler
+from config import USING_RAG
 
 class RecommendationAgent(Agent):
     def __init__(self, context="You are a dietary assistant that recommends meals based on user preferences and dietary restrictions."):
         super().__init__(context)
-        self.csv_handler = CSVHandler("data/datasets/NewRecipes.csv")
-        self.dataset = self.csv_handler.get_dataset()
-        self.vectorizer = Vectorizer(self.dataset)
+        if USING_RAG:
+            self.csv_handler = CSVHandler("data/datasets/NewRecipes.csv")
+            self.dataset = self.csv_handler.get_dataset()
+            self.vectorizer = Vectorizer(self.dataset)
         self.dietary_restrictions = {}
 
     def update_filters(self, dietary_restrictions):
@@ -18,12 +20,13 @@ class RecommendationAgent(Agent):
         if not(dietary_restrictions is None or dietary_restrictions==self.dietary_restrictions):
             self.dietary_restrictions = dietary_restrictions 
 
-            filtered_recipes = self.csv_handler.filter_recipes(dietary_restrictions)
+            if USING_RAG:
+                filtered_recipes = self.csv_handler.filter_recipes(dietary_restrictions)
 
-            if filtered_recipes.empty:
-                return "No recipes match your dietary restrictions."
+                if filtered_recipes.empty:
+                    return "No recipes match your dietary restrictions."
 
-            self.vectorizer = Vectorizer(filtered_recipes)
+                self.vectorizer = Vectorizer(filtered_recipes)
 
     def filter_and_recommend(self, user_input, dietary_restrictions=None):
         """
@@ -32,32 +35,35 @@ class RecommendationAgent(Agent):
         """
         self.update_filters(dietary_restrictions=dietary_restrictions)
 
-        recommendations = self.vectorizer.search(user_input, k=3)
+        if USING_RAG:
+            recommendations = self.vectorizer.search(user_input, k=3)
 
-        recommendations_text = "\n\n".join(
-            [
-                (
-                    f"**{row['Name']}**\n"
-                    f"- **Recipe ID**: {row['RecipeId']}\n"
-                    f"- **Author**: {row['AuthorName']} (ID: {row['AuthorId']})\n"
-                    f"- **Cook Time**: {row['CookTime']} | **Prep Time**: {row['PrepTime']} | **Total Time**: {row['TotalTime']}\n"
-                    f"- **Published On**: {row['DatePublished']}\n"
-                    f"- **Category**: {row['RecipeCategory']}\n"
-                    f"- **Description**: {row['Description']}\n"
-                    f"- **Nutritional Info**:\n"
-                    f"  - Calories: {row['Calories']}\n"
-                    f"  - Fat: {row['FatContent']} | Saturated Fat: {row['SaturatedFatContent']}\n"
-                    f"  - Cholesterol: {row['CholesterolContent']}\n"
-                    f"  - Sodium: {row['SodiumContent']}\n"
-                    f"  - Carbohydrates: {row['CarbohydrateContent']}\n"
-                    f"  - Fiber: {row['FiberContent']} | Sugar: {row['SugarContent']}\n"
-                    f"  - Protein: {row['ProteinContent']}\n"
-                    f"- **Servings**: {row['RecipeServings']} | **Yield**: {row['RecipeYield']}\n"
-                    f"- **Instructions**: {row['RecipeInstructions']}\n"
-                )
-                for _, row in recommendations.iterrows()
-            ]
-        )
+            recommendations_text = "\n\n".join(
+                [
+                    (
+                        f"**{row['Name']}**\n"
+                        f"- **Recipe ID**: {row['RecipeId']}\n"
+                        f"- **Author**: {row['AuthorName']} (ID: {row['AuthorId']})\n"
+                        f"- **Cook Time**: {row['CookTime']} | **Prep Time**: {row['PrepTime']} | **Total Time**: {row['TotalTime']}\n"
+                        f"- **Published On**: {row['DatePublished']}\n"
+                        f"- **Category**: {row['RecipeCategory']}\n"
+                        f"- **Description**: {row['Description']}\n"
+                        f"- **Nutritional Info**:\n"
+                        f"  - Calories: {row['Calories']}\n"
+                        f"  - Fat: {row['FatContent']} | Saturated Fat: {row['SaturatedFatContent']}\n"
+                        f"  - Cholesterol: {row['CholesterolContent']}\n"
+                        f"  - Sodium: {row['SodiumContent']}\n"
+                        f"  - Carbohydrates: {row['CarbohydrateContent']}\n"
+                        f"  - Fiber: {row['FiberContent']} | Sugar: {row['SugarContent']}\n"
+                        f"  - Protein: {row['ProteinContent']}\n"
+                        f"- **Servings**: {row['RecipeServings']} | **Yield**: {row['RecipeYield']}\n"
+                        f"- **Instructions**: {row['RecipeInstructions']}\n"
+                    )
+                    for _, row in recommendations.iterrows()
+                ]
+            )
+        else:
+            recommendations_text = ""
 
 
         return recommendations_text
@@ -74,7 +80,10 @@ class RecommendationAgent(Agent):
         Combines chat-based interaction and filtered recommendation system.
         """
         # Create new prompt to the RAG
-        prompt = self.refine_prompt(user_input=user_input)
+        if USING_RAG:
+            prompt = self.refine_prompt(user_input=user_input)
+        else: 
+            prompt = ""
 
         # Get recommendation based on user input and current filters
         recommendations = self.filter_and_recommend(prompt, dietary_restrictions)
