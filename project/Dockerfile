@@ -20,9 +20,9 @@ ENV PATH /opt/conda/envs/diet-recommender/bin:$PATH
 WORKDIR /app
 COPY . .
 
-# Give permission to execute programs
-RUN chmod +x entrypoint.sh setup.sh runWeb.sh tests.sh coverage.sh
+# Make python search the modules
+ENV PYTHONPATH="/app:${PYTHONPATH}"
 
-# Execute entrypoint.sh
-CMD ["./entrypoint.sh"]
+# Default run
+CMD ["make", "run"]
 

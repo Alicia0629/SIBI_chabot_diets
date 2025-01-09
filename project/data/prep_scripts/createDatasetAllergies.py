@@ -72,4 +72,4 @@ mustard = "mustard"
 nomustard = ""
 nomustard = addData("Mustard", mustard, nomustard)
 
-data.to_csv("../datasets/Allergies.csv")
+data.to_csv("data/datasets/Allergies.csv")

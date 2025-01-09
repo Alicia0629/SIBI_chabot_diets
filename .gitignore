@@ -1,6 +1,8 @@
 __pycache__
 
 project/data/datasets
+project/data/2
+project/data/*.csv
 project/.coverage
 
 *.pkl

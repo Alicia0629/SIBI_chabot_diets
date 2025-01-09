@@ -22,13 +22,13 @@ def generate_embeddings(df):
     recipe_ids = df['RecipeId'].tolist()  
     return embeddings, recipe_ids
 
-def save_embeddings_to_pickle(embeddings, recipe_ids, filename='../datasets/embeddings.pkl'):
+def save_embeddings_to_pickle(embeddings, recipe_ids, filename='data/datasets/embeddings.pkl'):
     with open(filename, 'wb') as f:
         pickle.dump({'embeddings': embeddings, 'ids': recipe_ids}, f)
     print(f"Embeddings and Recipe IDs saved in {filename}")
 
 def main():
-    file_path = '../datasets/NewRecipes.csv'  
+    file_path = 'data/datasets/NewRecipes.csv'  
     df = load_recipes(file_path)  
     embeddings, recipe_ids = generate_embeddings(df) 
     save_embeddings_to_pickle(embeddings, recipe_ids) 

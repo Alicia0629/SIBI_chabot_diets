@@ -7,7 +7,7 @@ import ast
 
 print("Searching datasets...")
 
-dataset_dir = os.path.join('..','datasets')
+dataset_dir = os.path.join('data','datasets')
 recipes_path = ""
 allergies_path = ""
 path = ""

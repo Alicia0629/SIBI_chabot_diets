@@ -99,7 +99,7 @@ def changeData(userProfile:UserProfile, AIMessage:str):
     verify_agent = VerifyDataAgent()
     coherent = verify_agent.verify_data_of_user(newProfile)
 
-    if True:
+    if 'true' in coherent.lower():
         userProfile.updateFromUserProfile(newProfile)
 
     return coherent
