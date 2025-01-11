@@ -63,7 +63,7 @@ sudo pacman -S make
 
 1. Abrir PowerShell como administrador si estás en Windows o una terminal si estás en Linux.
 
-2. Clona el repositorio:
+2. Clona el repositorio
 ```
 git clone https://github.com/Alicia0629/SIBI_chabot_diets.git
 ```
@@ -77,7 +77,7 @@ cd project
 
 4. Si tienes windows abre Docker Desktop
 
-5. Inicia el proceso de construcción **(puede tomar dos horas):**
+5. Inicia el proceso de construcción **(puede tomar dos horas)**
 - **Windows**:
 ```
 make build
@@ -89,8 +89,7 @@ sudo make build
 ```
 
 
-6. Ejecuta la aplicación:
-- **Debian/Ubuntu**:
+6. Ejecuta la aplicación
 - **Windows**:
 ```
 make run
