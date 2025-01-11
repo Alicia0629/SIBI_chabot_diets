@@ -61,7 +61,7 @@ sudo pacman -S make
 
 ## Instrucciones de Uso
 
-1. Abrir PowerShell como administrador.
+1. Abrir PowerShell como administrador si estás en Windows o una terminal si estás en Linux.
 
 2. Clona el repositorio:
 ```
@@ -75,12 +75,29 @@ cd SIBI_chabot_diets
 cd project
 ```
 
-4. Inicia el proceso de construcción **(puede tomar dos horas):**
+4. Si tienes windows abre Docker Desktop
+
+5. Inicia el proceso de construcción **(puede tomar dos horas):**
+- **Windows**:
 ```
 make build
 ```
 
+- **Linux**:
+```
+sudo make build
+```
+
+
 6. Ejecuta la aplicación:
+- **Debian/Ubuntu**:
+- **Windows**:
 ```
 make run
 ```
+
+- **Linux**:
+```
+sudo make run
+```
+
