@@ -24,7 +24,7 @@ build:
 	make clean-used-dockers
 
 run:
-	$(DOCKER_RUN) streamlit run /app/ui/web.py
+	$(DOCKER_RUN) streamlit run /app/ui/web.py --server.port 8000
 	make clean-used-dockers
 
 tests:
