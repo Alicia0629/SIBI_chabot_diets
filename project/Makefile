@@ -1,7 +1,11 @@
 DOCKER_IMAGE=sibi_chatbot
-DOCKER_RUN=docker run -it -v $(shell pwd)/data:/app/data -v $(shell pwd)/htmlcov:/app/htmlcov -p 8000:8000 $(DOCKER_IMAGE)
-PYTHON_RUN=$(DOCKER_RUN) python3
+ifeq ($(OS),Windows_NT)
+  DOCKER_RUN=docker run -it -v $(CURDIR)/data:/app/data -p 8000:8000 $(DOCKER_IMAGE)
+else
+  DOCKER_RUN=docker run -it -v $(shell pwd)/data:/app/data -p 8000:8000 $(DOCKER_IMAGE)
+endif
 
+PYTHON_RUN=$(DOCKER_RUN) python3
 .PHONY: build run tests clean help
 
 
@@ -20,18 +24,18 @@ build:
 	make clean-used-dockers
 
 run:
-	$(DOCKER_RUN) streamlit run ui/web.py
+	$(DOCKER_RUN) streamlit run /app/ui/web.py
 	make clean-used-dockers
 
 tests:
-	$(PYTHON_RUN) tests/run_tests.py
+	$(PYTHON_RUN) /app/tests/run_tests.py
 	make clean-used-dockers
 
 clean-used-dockers:
 	docker container prune -f
 
 clean:
-	sudo docker builder prune
+	docker builder prune
 
 help:
 	@echo "Uso del Makefile:"
