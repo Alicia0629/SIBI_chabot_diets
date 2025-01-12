@@ -5,7 +5,7 @@ SIBI_chatbot_diets is a chatbot designed to provide personalized dietary recomme
 1. [Requirements](#Requirements)
    - [Docker](#docker)
    - [Makefile](#makefile)
-2. [Usage Instructions](#Usage Instructions)
+2. [Usage Instructions](#Usage_Instructions)
 
 ---
 
