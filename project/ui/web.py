@@ -26,7 +26,7 @@ if 'user' not in st.session_state:
     with col3:
         sexo = st.radio("Sexo", ["Masculino", "Femenino"])
         edad = st.slider("Edad", min_value=18, max_value=120, value=18)
-        altura = st.slider("Altura (cm)", min_value=50, max_value=250, value=167)
+        altura = st.slider("Altura (cm)", min_value=50, max_value=250, value=50)
         peso = st.number_input("Peso (kg)", min_value=1.0, max_value=300.0, step=1.0, format="%.1f")
 
 
